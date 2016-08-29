@@ -1,6 +1,7 @@
     var webpack = require('webpack');
     var path = require('path');
 
+
     module.exports={
         devtool: "eval-source-map",
         entry:{
@@ -34,12 +35,12 @@
         postcss: [
             require('autoprefixer')//调用autoprefixer插件
         ],
-        devServer: {
-            colors: true,
-            historyApiFallback: true,
-            inline: true,
-            hot: true
-        },
+        // devServer: {
+        //     colors: true,
+        //     historyApiFallback: true,
+        //     inline: true,
+        //     hot: true
+        // },
         plugins:[
             new webpack.NoErrorsPlugin(),
             //提供全局的变量，在模块中使用无需用require引入
@@ -49,9 +50,9 @@
                 // nie: "nie"
             }),
             //将公共代码抽离出来合并为一个文件
-            new CommonsChunkPlugin('common.js'),
+            new webpack.optimize.CommonsChunkPlugin('common.js'),
             //js文件的压缩
-            new uglifyJsPlugin({
+            new webpack.optimize.UglifyJsPlugin({
                 compress: {
                     warnings: false
                 }

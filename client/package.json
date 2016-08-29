@@ -26,6 +26,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
-    "redux-logger": "^2.6.1"
+    "autoprefixer": "^6.4.0",
+    "redux-logger": "^2.6.1",
+    "webpack-vendor-chunk-plugin": "^1.0.0"
   }
 }
