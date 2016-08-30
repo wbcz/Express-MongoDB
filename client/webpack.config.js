@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   	devtool: 'eval-source-map',//配置生成Source Maps，选择合适的选项
-	entry: __dirname + "/app/main.js",
+	entry: {main: __dirname + "/app/main.js", other: __dirname + "/app/main.js"},
 	output: {
 		path: __dirname + "/public",
 		filename:"[name].js"
@@ -38,9 +38,9 @@ module.exports = {
 	        title: 'My App',
 
     	}),
-	    new webpack.optimize.CommonsChunkPlugin("common11.js"),
-	    new ExtractTextPlugin("style.css"),
-	    new webpack.HotModuleReplacementPlugin()//热加载插件s
+	    new webpack.optimize.CommonsChunkPlugin("common.js"),
+	    new ExtractTextPlugin("[name].css"),
+	    new webpack.HotModuleReplacementPlugin()//热加载插件
      //    new webpack.optimize.UglifyJsPlugin()
     ]
 }
