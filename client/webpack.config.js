@@ -26,7 +26,7 @@ module.exports = {
 
 
             // ExtractTextPlugin.extract()动态输出Link标签
-            //{ test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
+            { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
             //{ test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass!autoprefixer?{browsers:["Firefox >= 20","> 5%","last 2 versions"]}') }
         ]
     },
@@ -34,10 +34,13 @@ module.exports = {
         extensions: ['', '.vue', '.js', '.json', '.scss', '.css']
     },
     plugins: [
-    	new HtmlWebpackPlugin(),
-	    new webpack.optimize.CommonsChunkPlugin('../common.js', ['Greeter', 'other']),
-	    //new ExtractTextPlugin("[name].css")
-	    new webpack.HotModuleReplacementPlugin(),//热加载插件s
+    	new HtmlWebpackPlugin({
+	        title: 'My App',
+
+    	}),
+	    new webpack.optimize.CommonsChunkPlugin("common11.js"),
+	    new ExtractTextPlugin("style.css"),
+	    new webpack.HotModuleReplacementPlugin()//热加载插件s
      //    new webpack.optimize.UglifyJsPlugin()
     ]
 }
