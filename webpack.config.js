@@ -6,19 +6,21 @@ var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
-  	devtool: 'eval-source-map',//配置生成Source Maps，选择合适的选项
-	entry: {main: "./app/main.js", other: "./app/other.js"},
-	output: {
-		path: "./public",
-		filename:"[name].js"
-	},
+var publicPath = "http://localhost:3000";
+baseConfig = {
+    devtool: 'eval-source-map',//配置生成Source Maps，选择合适的选项
+    entry: {main: "./client/app/main.js", other: "./client/app/other.js"},
+    output: {
+        path: "./client/public",
+        filename:"[name].js",
+        publicPath: publicPath
+    },
     devServer: {
-        contentBase: "./public",
+        contentBase: "./client/public",
         colors: true,
         inline: true
     },
-	module: {
+    module: {
         loaders: [
             // 样式动态插入html style标签里
             {test: /\.js$/, loader: 'babel'},
@@ -32,28 +34,25 @@ module.exports = {
         ]
     },
     postcss: [
-    	require('autoprefixer')
+        require('autoprefixer')
     ],
     resolve: {
         extensions: ['', '.vue', '.js', '.json', '.scss', '.css'],
         //引入cdn外部文件，查询速度快
         // alias: {
-        // 	'react':path.join()
+        //  'react':path.join()
         // }
     },
     plugins: [
-    	new HtmlWebpackPlugin({
-	        title: 'My App',
-	        //filename: '.public/index.html'
-    	}),
-	    new webpack.optimize.CommonsChunkPlugin("common.js"),
-	    new ExtractTextPlugin("./public/css/[name].css"),
-	    new webpack.HotModuleReplacementPlugin(),//热加载插件
-     	new webpack.optimize.UglifyJsPlugin(),
-     	new webpack.DefinePlugin({
-		    PRODUCTION: JSON.stringify(true),
-		    VERSION: JSON.stringify("5fa3b9"),
-		    BROWSER_SUPPORTS_HTML5: true
-		})
+        new HtmlWebpackPlugin({
+            title: 'My App',
+            //filename: '.public/index.html'
+        }),
+        new webpack.optimize.CommonsChunkPlugin("common.js"),
+        new ExtractTextPlugin("./client/public/css/[name].css"),
+        new webpack.HotModuleReplacementPlugin(),//热加载插件
+        new webpack.optimize.UglifyJsPlugin()
     ]
 }
+
+module.exports = baseConfig;

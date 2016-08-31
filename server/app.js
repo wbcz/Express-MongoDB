@@ -8,11 +8,59 @@ var bodyParser = require('body-parser');
 var users = require('./routes/users');
 
 var app = express();
-
+var port = 3000;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// local variables for all views
+app.locals.env = process.env.NODE_ENV || 'dev';
+app.locals.reload = true;
+
+if (isDev) {
+
+    // static assets served by webpack-dev-middleware & webpack-hot-middleware for development
+    var webpack = require('webpack'),
+        webpackDevMiddleware = require('webpack-dev-middleware'),
+        webpackHotMiddleware = require('webpack-hot-middleware'),
+        webpackDevConfig = require('./webpack.config.js');
+
+    var compiler = webpack(webpackDevConfig);
+
+    // attach to the compiler & the server
+    app.use(webpackDevMiddleware(compiler, {
+
+        // public path should be the same with webpack config
+        publicPath: webpackDevConfig.output.publicPath,
+        noInfo: true,
+        stats: {
+            colors: true
+        }
+    }));
+    app.use(webpackHotMiddleware(compiler));
+
+    //require('./server/routes')(app);
+    app.use('/', users);
+    // add "reload" to express, see: https://www.npmjs.com/package/reload
+    var reload = require('reload');
+    var http = require('http');
+
+    var server = http.createServer(app);
+    reload(server, app);
+
+    server.listen(port, function(){
+        console.log('App (dev) is now running on port 3000!');
+    });
+} else {
+
+    // static assets served by express.static() for production
+    app.use(express.static(path.join(__dirname, 'public')));
+    //require('./server/routes')(app);
+    app.use('/', users);
+    app.listen(port, function () {
+        console.log('App (production) is now running on port 3000!');
+    });
+}
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -20,8 +68,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
